@@ -1,0 +1,115 @@
+RECORDATORIO DE LOS PASOS SEGUIDOS EN ESTE PROYECTO
+1- Crear proyecto nuevo en blanco con angular y capacitor:
+ionic start geolocation4 blank --type=angular --capacitor
+
+2- Crear servicio que me dará datos de Geolocation con capacitor
+ionic g s datosGPS
+
+3- Hay varios librerías para obtener datos GPS: nativa, javascript, cordova, capacitor y alguna mas)
+desde docu oficial Capacitor buscar para instalar Geolocation
+
+https://capacitorjs.com/docs/v2/apis/geolocation
+
+npm install @capacitor/geolocation
+npm run build ( esto no sale en la oficial, es una respuesta de error al hacer npx cap sync)
+npx cap sync
+
+para hacer uso de la clase estática Geolocation en el .ts se debe importar antes:
+import { Geolocation } from '@capacitor/geolocation';
+
+4- abrir servidor local para desarrollo
+ionic serve
+
+5- crear componente donde obtener datos Geolocation
+ ionic g c posicion
+
+6- para hacer que posicion.component sea hijo de Home.component tiene que declarse en el home.module
+ con su import correspondiente. Para mostrar posicion.component se usa el selector app-posicion en el
+ template del Home
+
+
+7- para crear android
+ ionic build
+ ionic cap add android
+
+**Para Googlemaps también hay varias opciones. Este ejemplo usa GoogleMaps JavaScript Api. Se tiene que habilitar desde
+https://console.cloud.google.com en Biblioteca de Api.
+En index.html encima de </head> agregar
+<script src='https://maps.googleapis.com/maps/api/js?libraries=places&key=MI_KEY_AQUI'></script>
+
+para Geolocation Capacitor en Android añadir en manifest de android/app/src/main:
+<!-- Geolocation API -->
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-feature android:name="android.hardware.location.gps" />
+
+8 - cambios en proyecto:
+
+Every time you perform a build (e.g. ionic build) that updates your web directory (default: www),
+you'll need to copy those changes into your native projects:
+
+ionic cap copy
+
+Note: After making updates to the native portion of the code (such as adding a new plugin), use the sync command:
+
+ionic cap sync
+
+9 - abrir proyecto en Androidionic cap open android
+
+ionic cap open android
+
+si hago cambios con ionic cap sync se actualizará
+
+10 - crear componente. Aquí pinto el googlemaps y recibo ubicación actual
+
+ionic g c mapa
+
+11 - Para Googlemaps utilizo GoogleMaps JavaScript Api.
+Se tiene que habilitar https://console.cloud.google.com en Biblioteca de Api.
+//En index.html encima de </head> agregar la key
+//<script src='https://maps.googleapis.com/maps/api/js?libraries=places&key=MI_KEY_AQUI'></script>
+
+
+ejemplo async await, se ejecutan de manera secuencial.
+async startCallbackHell() {
+    try {
+      const res1 = await this.callback1(0);
+      const res2 = await this.callback2(res1);
+      const res3 = await this.callback3(res2);
+
+    } catch (error) {
+      console.log('error:' + error);
+    } finally {
+      console.log('todos hechos');
+    }
+  }
+  callback1(params: any) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        console.log('callback1 p 1: ' + params);
+        resolve('1');
+      }
+        , 1000);
+    }
+    );
+  }
+  callback2(params: any) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        console.log('callback2 p 2: ' + params);
+        resolve('2');
+      }
+        , 1000);
+    }
+    );
+  }
+  callback3(params: any) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        console.log('callback3 p 3: ' + params);
+        resolve('3');
+      }
+        , 1000);
+    }
+    );
+  }
